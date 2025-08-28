@@ -84,7 +84,7 @@ app.get('/api/script', validateRequest, (req, res) => {
             return;
         }
         
-        if (message === "Данная команда недоступна в режиме AFK" && !isSendingCommands) { 
+        if (message === "Данная команда недоступна в режиме AFK" || message === "[⚠] Данной команды не существует!" && !isSendingCommands) { 
             isSendingCommands = true;
             
             // Send /hub command
