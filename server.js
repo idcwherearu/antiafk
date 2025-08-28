@@ -10,7 +10,6 @@ const CONFIG = {
     NODE_ENV: process.env.NODE_ENV || 'production'
 };
 
-var anarchy = "604"
 
 // ==================== MIDDLEWARE ====================
 app.use(cors());
@@ -80,8 +79,8 @@ app.get('/api/script', validateRequest, (req, res) => {
         var message = event.getMessage();
         
         // Handle "[⚠] Данной команды не существует" message
-        if (message.includes("[⚠] Данной команды не существует")) {
-            chat("/an" + anarchy);
+        if (message.includes("[⚠] Данной команды не существует!")) {
+            chat("/an604");
             return;
         }
         
@@ -93,7 +92,7 @@ app.get('/api/script', validateRequest, (req, res) => {
             
             // Wait 100ms and send /an command with the anarchy code
             java.lang.Thread.sleep(100);
-            chat("/an" + anarchy);
+            chat("/an604");
             
             // Reset the flag after a short delay
             java.lang.Thread.sleep(50);
