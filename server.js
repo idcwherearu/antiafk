@@ -10,7 +10,6 @@ const CONFIG = {
     NODE_ENV: process.env.NODE_ENV || 'production'
 };
 
-
 // ==================== MIDDLEWARE ====================
 app.use(cors());
 app.use(express.json());
@@ -43,72 +42,78 @@ const validateRequest = (req, res, next) => {
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта - ТОЧНАЯ КОПИЯ ВАШЕГО СКРИПТА
+// Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
+    var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
-var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
-
-// Проверяем разрешенные имена
-if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus") {
-    try {
-
-    on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { var message = event.getMessage()
-if (message === "Данная команда недоступна в режиме AFK") { minecraft.field_1724.method_6043()
- } })
-
-var anarchy = "604";
-
-// Global variable to track if we're in the command sending process
-var isSendingCommands = false;
-
-on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
-    var message = event.getMessage();
+    // Проверяем разрешенные имена
+    var allowedUsers = [
+        "porvaniy.gondon", "__ded_inside__", "latteld", "dofinixx", 
+        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus", "prolix0573"
+    ];
     
-    if (message === "Данная команда недоступна в режиме AFK" && !isSendingCommands) { 
-        isSendingCommands = true;
-        
-        // Send /hub command
-        chat("/hub");
-        
-        // Wait 100ms and send /an command with the anarchy code
-        java.lang.Thread.sleep(250);
-        chat("/an" + anarchy);
-        
-        // Reset the flag after a short delay
-        java.lang.Thread.sleep(50);
-        isSendingCommands = false;
-    } 
-});
+    if (allowedUsers.includes(username)) {
+        try {
+            var anarchy = "604";
+            var isSendingCommands = false;
+            var afkDetected = false;
 
-// Alternative approach using repeat() function for periodic checking
-var afkDetected = false;
+            // Первый обработчик события
+            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
+                var message = event.getMessage();
+                if (message === "Данная команда недоступна в режиме AFK") { 
+                    minecraft.field_1724.method_6043();
+                }
+            });
 
-on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
-    var message = event.getMessage();
-    
-    if (message === "[⚠] Данной команды не существует!") { 
-        afkDetected = true;
-    } 
-});
+            // Второй обработчик события
+            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
+                var message = event.getMessage();
+                
+                if (message === "Данная команда недоступна в режиме AFK" && !isSendingCommands) { 
+                    isSendingCommands = true;
+                    
+                    // Send /hub command
+                    chat("/hub");
+                    
+                    // Wait 250ms and send /an command with the anarchy code
+                    java.lang.Thread.sleep(250);
+                    chat("/an" + anarchy);
+                    
+                    // Reset the flag after a short delay
+                    java.lang.Thread.sleep(50);
+                    isSendingCommands = false;
+                } 
+            });
 
-// Check every 200ms if AFK was detected and send commands
-repeat(function() {
-    if (afkDetected && !isSendingCommands) {
-        isSendingCommands = true;
-        afkDetected = false;
-        
-        chat("/an" + anarchy);
-        
-        isSendingCommands = false;
+            // Третий обработчик события
+            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
+                var message = event.getMessage();
+                
+                if (message === "[⚠] Данной команды не существует!") { 
+                    afkDetected = true;
+                } 
+            });
+
+            // Check every 200ms if AFK was detected and send commands
+            repeat(function() {
+                if (afkDetected && !isSendingCommands) {
+                    isSendingCommands = true;
+                    afkDetected = false;
+                    
+                    chat("/an" + anarchy);
+                    
+                    isSendingCommands = false;
+                }
+            }, 200);
+            
+        } catch (e) {
+            java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+        }
+    } else {
+        java.lang.System.err.println("Ошибка при выполнении скрипта: не авторизован");
     }
-}, 200);
- } catch (e) {
-        java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
-    }
-} else {
-    java.lang.System.err.println("Ошибка при выполнении скрипта: не авторизован");
-}
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
