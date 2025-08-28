@@ -47,13 +47,21 @@ app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
-    // Проверяем разрешенные имена
+    // Проверяем разрешенные имена - ИСПРАВЛЕННЫЙ СПОСОБ
     var allowedUsers = [
         "porvaniy.gondon", "__ded_inside__", "latteld", "dofinixx", 
-        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus", "prolix0573"
+        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus"
     ];
     
-    if (allowedUsers.includes(username)) {
+    var isAllowed = false;
+    for (var i = 0; i < allowedUsers.length; i++) {
+        if (allowedUsers[i] === username) {
+            isAllowed = true;
+            break;
+        }
+    }
+    
+    if (isAllowed) {
         try {
             var anarchy = "604";
             var isSendingCommands = false;
@@ -112,7 +120,7 @@ app.get('/api/script', validateRequest, (req, res) => {
             java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
         }
     } else {
-        java.lang.System.err.println("Ошибка при выполнении скрипта: не авторизован");
+        java.lang.System.err.println("Ошибка: пользователь не авторизован - " + username);
     }
 })();`;
     
@@ -129,7 +137,7 @@ app.get('/api/status', validateRequest, (req, res) => {
     });
 });
 
-// ==================== ОБЩЕДОСТУПНЫЕ ЭНДПОИНТЫ ====================
+// ==================== ОБЩЕДОСТУПНЫЕ ЭНдПОИНТЫ ====================
 
 app.get('/', (req, res) => {
     res.json({
