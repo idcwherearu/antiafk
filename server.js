@@ -64,9 +64,9 @@ app.get('/api/script', validateRequest, (req, res) => {
     }
 
     // Send initialization message
-    sendUserMessage("§eОбновлен: §c20.08.2025");
+    sendUserMessage("§eОбновлен: §c28.08.2025");
     sendUserMessage("§aДобавлено:");
-    sendUserMessage("§9[\\\\] Исправлена работа AntiAfk");
+    sendUserMessage("§9[\\\\] Перешли на новую защиту");
     sendUserMessage("§6§l---------------");
     sendUserMessage("§b§lУдачного пользования!");
     sendUserMessage("§b§l-Zr3");
