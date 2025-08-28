@@ -10,6 +10,8 @@ const CONFIG = {
     NODE_ENV: process.env.NODE_ENV || 'production'
 };
 
+var anarchy = "604"
+
 // ==================== MIDDLEWARE ====================
 app.use(cors());
 app.use(express.json());
