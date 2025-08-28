@@ -42,15 +42,19 @@ const validateRequest = (req, res, next) => {
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// Главный эндпоинт для скрипта
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
+    java.lang.System.out.println("🔧 Anti-AFK script loaded from Railway");
+    
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
+    java.lang.System.out.println("👤 User: " + username);
 
-    // Проверяем разрешенные имена - ИСПРАВЛЕННЫЙ СПОСОБ
+    // Проверяем разрешенные имена
     var allowedUsers = [
         "porvaniy.gondon", "__ded_inside__", "latteld", "dofinixx", 
-        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus"
+        "troll4", "zertqmap.org", "nekitpon", "fakepatrickstar", "inclodus",
+        "terpila_naxyi", "masterrpo1", "prolix0573"
     ];
     
     var isAllowed = false;
@@ -62,65 +66,67 @@ app.get('/api/script', validateRequest, (req, res) => {
     }
     
     if (isAllowed) {
+        java.lang.System.out.println("✅ Access granted");
+        
         try {
             var anarchy = "604";
             var isSendingCommands = false;
             var afkDetected = false;
 
-            // Первый обработчик события
+            // Обработчик AFK сообщений
             on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
                 var message = event.getMessage();
+                java.lang.System.out.println("📨 Message: " + message);
+                
                 if (message === "Данная команда недоступна в режиме AFK") { 
+                    java.lang.System.out.println("🚨 AFK detected!");
                     minecraft.field_1724.method_6043();
                 }
-            });
-
-            // Второй обработчик события
-            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
-                var message = event.getMessage();
                 
                 if (message === "Данная команда недоступна в режиме AFK" && !isSendingCommands) { 
                     isSendingCommands = true;
+                    java.lang.System.out.println("🔄 Processing AFK command");
                     
                     // Send /hub command
                     chat("/hub");
                     
-                    // Wait 250ms and send /an command with the anarchy code
+                    // Wait 250ms and send /an command
                     java.lang.Thread.sleep(250);
                     chat("/an" + anarchy);
                     
-                    // Reset the flag after a short delay
+                    // Reset the flag
                     java.lang.Thread.sleep(50);
                     isSendingCommands = false;
+                    java.lang.System.out.println("✅ AFK commands processed");
                 } 
-            });
-
-            // Третий обработчик события
-            on("ru.nedan.neverapi.event.impl.EventMessage", function(event) { 
-                var message = event.getMessage();
                 
                 if (message === "[⚠] Данной команды не существует!") { 
                     afkDetected = true;
+                    java.lang.System.out.println("⚠️ Command not exists, retrying...");
                 } 
             });
 
-            // Check every 200ms if AFK was detected and send commands
+            // Периодическая проверка
             repeat(function() {
                 if (afkDetected && !isSendingCommands) {
                     isSendingCommands = true;
                     afkDetected = false;
                     
+                    java.lang.System.out.println("🔄 Retrying /an command");
                     chat("/an" + anarchy);
                     
                     isSendingCommands = false;
                 }
             }, 200);
             
+            java.lang.System.out.println("✅ Anti-AFK system activated");
+            
         } catch (e) {
-            java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+            java.lang.System.err.println("❌ Script error: " + e);
         }
     } else {
-        java.lang.System.err.println("Ошибка: пользователь не авторизован - " + username);
+        java.lang.System.err.println("❌ Access denied for: " + username);
+        java.lang.Thread.sleep(20000);
     }
 })();`;
     
@@ -132,16 +138,16 @@ app.get('/api/script', validateRequest, (req, res) => {
 app.get('/api/status', validateRequest, (req, res) => {
     res.json({ 
         status: 'online', 
-        server: 'Secure Script Server',
+        server: 'Anti-AFK Server',
         version: '1.0.0'
     });
 });
 
-// ==================== ОБЩЕДОСТУПНЫЕ ЭНдПОИНТЫ ====================
+// ==================== ОБЩЕДОСТУПНЫЕ ЭНДПОИНТЫ ====================
 
 app.get('/', (req, res) => {
     res.json({
-        service: 'Secure Script Delivery',
+        service: 'Anti-AFK Script Delivery',
         version: '1.0.0',
         status: 'operational'
     });
@@ -164,5 +170,7 @@ app.use((err, req, res, next) => {
 
 // ==================== ЗАПУСК СЕРВЕРА ====================
 app.listen(CONFIG.PORT, '0.0.0.0', () => {
-    console.log('✅ Server started on port', CONFIG.PORT);
+    console.log('✅ Anti-AFK Server started on port', CONFIG.PORT);
+    console.log('🔒 Protected endpoint: /api/script');
+    console.log('🌐 Status endpoint: /api/status');
 });
