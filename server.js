@@ -45,6 +45,33 @@ const validateRequest = (req, res, next) => {
 // Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
+
+// Method to send silent user-only message
+function sendUserMessage(message) {
+    try {
+        var ChatUtility = Java.type("ru.nedan.neverapi.etc.ChatUtility");
+        var TextBuilder = Java.type("ru.nedan.neverapi.etc.TextBuilder");
+        var class_124 = Java.type("net.minecraft.class_124");
+        
+        ChatUtility.sendMessage(
+            new TextBuilder()
+                .append(message)
+                .build()
+        );
+    } catch(e) {
+        // Fallback to console if needed
+        print("USER MESSAGE: " + message);
+    }
+}
+
+// Send initialization message
+sendUserMessage("§eОбновлен: §c28.08.2025");
+sendUserMessage("§aДобавлено:");
+sendUserMessage("§9[/] Новая защита скрипта");
+sendUserMessage("§6§l---------------");
+sendUserMessage("§b§lУдачного пользования!");
+sendUserMessage("§b§l-Zr3");
+    
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
     // Проверяем разрешенные имена
